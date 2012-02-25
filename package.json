@@ -8,4 +8,8 @@
     , "mongoose": "2.5.9"
     , "connect": "1.8.5"
   }
+  , "devDependencies": {
+      "mocha": "0.10.0"
+    , "should": "0.5.1"
+  }
 }
