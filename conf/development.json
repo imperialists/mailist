@@ -1,3 +1,4 @@
 {
   "mongodb_uri": "mongodb://localhost/mailist-dev"
+, "smtp_port": 25
 }

@@ -11,11 +11,13 @@ conf     = require '../conf/development.json'
 mongoose.connect conf.mongodb_uri
 svr = smtp.createServer {
     name: 'maili.st'
-    secureConnection: yes
     SMTPBanner: 'maili.st SMTP server'
 }
-svr.listen 25
-console.log 'SMTP Server listening on port 25'
+svr.listen conf.smtp_port, (err) ->
+    if err?
+        console.log 'Unable to start SMTP Server: ' + err
+    else
+        console.log 'SMTP Server listening on port ' + conf.smtp_port
 
 # ----- Event handlers -----
 
@@ -27,16 +29,17 @@ svr.on 'startData', (envelope) ->
     # TODO: (1) Process the to-addresses for 'label'
     console.log "From: " + envelope.from
     console.log "To (labels): " + envelope.to
-    # TODO: (2) Prepare a Mongol destination to write mail body
+    # TODO: (2) Prepare a MongoDB destination to write mail body
 
 svr.on 'data', (envelope, chunk) ->
     # TODO: (1a) Parse 'In-reply-to: message-id' to identify thread parent
     # TODO: (1b) Parse custom header to identify thread parent
-    # TODO: (2) Put data into Mongol database
+    # TODO: (2) Put data into MongoDB database
     console.log "Data: " + chunk
 
 svr.on 'dataReady', (envelope, callback) ->
-    # TODO: (1) Close MongolDB connection
+    # TODO: (1) Close MongoDB connection
     # TODO: (2) Use callback(null, queue_id) to notify client
     # TODO: (3) Trigger bouncing of email to subscribers
+    callback null, 'QUEUE-ID'
     console.log "Email received"
