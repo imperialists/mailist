@@ -5,7 +5,7 @@ jade = require 'jade'
 app = module.exports = express.createServer()
 
 # CONFIGURATION
-
+mongoose = require "mongoose"
 app.configure(() ->
 	app.set 'view engine', 'jade'
 	app.set 'views', "#{__dirname}/views"
@@ -20,12 +20,14 @@ app.configure(() ->
 )
 
 app.configure 'development', () ->
+	mongoose.connect 'mongodb://localhost/mailist-dev'
 	app.use express.errorHandler({
 		dumpExceptions: true
 		showStack     : true
 	})
 
 app.configure 'production', () ->
+	mongoose.connect 'mongodb://localhost/mailist-dev'
 	app.use express.errorHandler()
 
 # ROUTES
@@ -37,5 +39,5 @@ app.get '/', (req, res) ->
 			
 # SERVER
 	
-app.listen(1234)
+app.listen(3000)
 console.log "Express server listening on port #{app.address().port}"
