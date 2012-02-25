@@ -1,0 +1,55 @@
+#!/usr/bin/env coffee
+#
+# mailist [options]
+#
+# Launch a mailing list
+
+#Mailist    = require '..'
+Fs         = require 'fs'
+Path       = require 'path'
+HTTP       = require 'http'
+#Creator    = require '../src/creator'
+OptParse   = require 'optparse'
+
+Switches = [
+    [ "-h", "--help",            "Display the help information" ],
+    [ "-p", "--port",            "The port to use"]
+    [ "-v", "--version",         "Displays the version of hubot installed" ]
+]
+
+Options =
+    path: "."
+    name: "maili.st"
+    adapter: "mail"
+
+Parser = new OptParse.OptionParser(Switches)
+Parser.banner = "Usage mailist [options]"
+
+Parser.on "adapter", (opt, value) ->
+    Options.adapter = value
+
+Parser.on "port", (opt, value) ->
+    Options.port = value
+
+Parser.on "help", (opt, value) ->
+    console.log Parser.toString()
+    process.exit 0
+
+Parser.on "version", (opt, value) ->
+    Options.version = true
+
+Parser.parse process.argv
+
+unless process.platform is "win32"
+    process.on 'SIGTERM', ->
+        process.exit 0
+
+adapterPath = Path.resolve __dirname, "..", "src", "adapters"
+
+server = Mailist.load adapterPath, Options.adapter
+
+if Options.version
+    console.log server.version
+    process.exit 0
+
+server.run()
