@@ -37,5 +37,5 @@ app.get '/', (req, res) ->
 			
 # SERVER
 	
-app.listen(1234)
+app.listen(3000)
 console.log "Express server listening on port #{app.address().port}"
