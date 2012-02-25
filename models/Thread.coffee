@@ -1,8 +1,9 @@
 mongoose = require 'mongoose'
+Message = require './Message'
 
 Thread = new mongoose.Schema(
-  title: String
-  body: String
+  messages: [Message]
+  labels: [String]
 )
 
 module.exports = mongoose.model 'Thread', Thread
