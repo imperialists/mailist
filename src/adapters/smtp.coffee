@@ -6,6 +6,7 @@ event    = require 'events'
 smtp     = require 'simplesmtp'
 mail     = require 'mailcomposer'
 email    = require 'emailjs'
+msgUtils = require '../lib/utils'
 
 parser   = require '../parser'
 
@@ -71,7 +72,7 @@ class SMTP extends event.EventEmitter
 
         @svr.on 'dataReady', (envelope, callback) =>
             { header, body } = parser.parseMail envelope.content
-            callback null, 'QUEUE-ID'
+            callback null, msgUtils.generateQueueId()
             @receive new Server.Message header, body
             
         self.emit "connected"
