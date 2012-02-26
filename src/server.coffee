@@ -7,6 +7,7 @@ Connect    = require 'connect'
 utils      = require './lib/utils'
 
 mongoose   = require "mongoose"
+Message     = require '../models/Message'
 Thread     = require '../models/Thread'
 
 DEFAULT_ADAPTERS = [ 'smtp' ]
@@ -44,6 +45,30 @@ class Server
     receive: (message) ->
         labels = utils.extractUsernames utils.extractEmails(message.header.to.value.split ',')
         console.log labels
+        
+        message = new Message
+            subject: message.subject
+            sender: message.sender
+            body: message.body
+        
+        if id = message.header['in-reply-to']?
+            Thread.findOne { 'messages.id': id }, (err, thread) ->
+                thread.messages.push message
+                
+                User.find { pins: thread.id }, (err, users) ->
+                    @send(user, message) for user in users
+        else
+            thread = new Thread
+                labels: labels
+                messages: [ message ]
+            thread.save (err) ->
+                @logger.error "Cannot create new thread: #{err}" if err?
+        
+                User.find { 'subscriptions': { $in: labels } }, (err, users) ->
+                    @send(user, message) for user in users
+            
+        
+        
         Thread.find { 'labels': { $in: labels } }, (err, docs) ->
             console.log docs
 	    #Thread.where('labels').in(labels).run (err, docs) ->

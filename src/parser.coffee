@@ -78,7 +78,6 @@ parse_multitype = (content, boundary) ->
         
         
 parse = (content) ->
-    console.log content
     content = explode(content, "\r\n\r\n", 2)
     header = parse_header_block(content[0])
        
