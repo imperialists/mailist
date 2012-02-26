@@ -20,17 +20,18 @@ exports.extractUsernames = (emails) -> emails.map (email) ->
 
 # Queue Id (16-char upper case random string) generator
 #
-exports.generateQueueId = (length=16) ->
+exports.generateQueueId = () ->
     s = ''
-    s += Math.random().toString(36).substr(2) while s.length < length
-    (s.substr 0, length).toUpperCase()
+    s += Math.random().toString(36).substr(2).substr 0, 6
+    s += '-'
+    s += Math.random().toString(36).substr(2).substr 0, 6
+    s += '-'
+    s += Math.random().toString(36).substr(2).substr 0, 2
+    s.toUpperCase() # Exim format: XXXXXX-YYYYYY-ZZ
 
 
 # Generate an almost unique Message-ID (32-char timestamp+random string)
 #
 exports.generateMsgId = (senderEmail) ->
-    length = 32
-    d = new Date()
-    s = '' + d.getTime() + '-'
-    s += Math.random().toString(36).substr(2) while s.length < length
-    (s.substr 0, length) + '@' + senderEmail.replace /^[a-z0-9\._-]+@/i, ''
+    uuid = require 'node-uuid'
+    uuid.v1() + '@' + senderEmail.replace /^[a-z0-9\._-]+@/i, ''
