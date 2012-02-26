@@ -20,7 +20,7 @@ Switches = [
 Options =
     path: "."
     name: "maili.st"
-    adapter: "mail"
+    adapter: "smtp"
 
 Parser = new OptParse.OptionParser(Switches)
 Parser.banner = "Usage mailist [options]"

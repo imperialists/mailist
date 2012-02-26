@@ -12,38 +12,38 @@ explode = (string, delim, limit) ->
     result
 
 
-parse_header: (header) ->
+parse_header = (header) ->
     result = {}
     header = header.split(";")
     result.value = trim(header[0])
-        
-    for i in [1..header.length]
-        continue if header[i] is ""
-        tupple = explode(header[i], "=", 2)      
+    
+    for part in header[1..]
+        console.log part
+        continue if part is ""
+        tupple = explode(part, "=", 2)      
         if tupple.length is 2
             result[trim(tupple[0])] = trim(tupple[1]).replace(/^"/, "").replace(/"$/, "")
         else
             result[trim(tupple[0])] = ""
-        
+    
     result
     
     
 parse_header_block = (content) ->
     result = {}
     return result if content is ""
-    header = content.split("\r\n")
         
-    for i in [0..header.length]
-        tupple = explode(header[i], ":", 2)
-        if header[i].match(/^\s+/) or tupple.length < 2
-            if key? and header[i].match(/^\s+/)
-                result[key] += " " + trim(arr[i])
+    for header in content.split("\r\n")
+        tupple = explode(header, ":", 2)
+        if header.match /^\s+/ or tupple.length < 2
+            if key? and header.match /^\s+/
+                result[key] += " " + trim header
             continue
         key = tupple[0].toLowerCase()
         result[key] = tupple[1]
     
     for key of result
-        result[key] = parse_header(result[key])
+        result[key] = parse_header result[key]
         
     result
         
@@ -78,9 +78,10 @@ parse_multitype = (content, boundary) ->
         
         
 parse = (content) ->
+    console.log content
     content = explode(content, "\r\n\r\n", 2)
     header = parse_header_block(content[0])
-        
+       
     if content.length is 2
         body = parse_body_block(content[1], header)
     else

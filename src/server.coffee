@@ -4,7 +4,7 @@ Log        = require 'log'
 Path       = require 'path'
 Connect    = require 'connect'
 
-DEFAULT_ADAPTERS = [ 'mail' ]
+DEFAULT_ADAPTERS = [ 'smtp' ]
 
 class Server
     constructor: (adapterPath, adapter) ->
@@ -32,8 +32,7 @@ class Server
         
     # Public: Passes the given message to any interested Listeners.
     #
-    # message - A Robot.Message instance. Listeners can flag this message as
-    #  'done' to prevent further execution
+    # message - A Server.Message instance.
     #
     # Returns nothing.
     receive: (message) ->
@@ -58,6 +57,6 @@ class Server
         @adapter.run()
         
 class Server.Message
-    constructor: (@from, @to, @header, @body) ->
+    constructor: (@header, @body) ->
 	
 module.exports = Server

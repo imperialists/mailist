@@ -4,9 +4,9 @@ Adapter  = require '../adapter'
 event   = require 'events'
 smtp     = require 'simplesmtp'
 
-parser   = require '../xutils'
+parser   = require '../parser'
 
-class Mail extends event.EventEmitter
+class SMTP extends event.EventEmitter
     constructor: (@server) ->
         
     send: (user, message) ->
@@ -38,12 +38,12 @@ class Mail extends event.EventEmitter
             envelope.content += chunk
 
         @svr.on 'dataReady', (envelope, callback) =>
-            { header, body } = parser.parse_part envelope.content
+            { header, body } = parser.parseMail envelope.content
             callback null, 'QUEUE-ID'
-            @receive new Server.Message envelope.from, envelope.to, header, body
+            @receive new Server.Message header, body
             
         #self.emit "connected"
         
         
 exports.use = (server) ->
-    new Mail server
+    new SMTP server
