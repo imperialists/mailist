@@ -1,3 +1,4 @@
+everyauth= require 'everyauth'
 mongoose = require 'mongoose'
 Thread   = require '../models/Thread'
 User     = require '../models/User'
@@ -6,12 +7,12 @@ withUser = (callback) ->
     User.findOne (err, user) ->
         callback(user)
         
-
 module.exports =
     index: (req, res) ->
         console.log 'index'
         res.render 'index',
             title: "maili.st"
+            toppanel: if everyauth.loggedIn then 'toppanel-user' else 'toppanel'
     
     
     getPinnedThreads: (req, res) ->
