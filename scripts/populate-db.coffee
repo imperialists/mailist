@@ -1,22 +1,24 @@
 mongoose = require "mongoose"
-db = mongoose.connect 'mongodb://localhost/mailist-dev'	
+db = mongoose.connect 'mongodb://localhost/mailist-dev' 
 Thread  = require '../models/Thread'
 User    = require '../models/User'
 
 message =
-	subject: 'Friday cakes'
-	sender: 'rumi.neykova@gmail.com'
-    body: 'Eat & Enjoy'
+  subject: 'Friday cakes'
+  sender: 'rumi.neykova@gmail.com'
+  body: 'Eat & Enjoy'
 
 thread = new Thread
     labels: ['notice-board']
 
 thread.messages.push message
 thread.save (err) ->
-	console.log err if err?
+  console.log err if err?
 
 user = new User
-    name: 'Petr Hosek'
+    name:
+      first: 'Petr'
+      last: 'Hosek'
     email: 'p.hosek@imperial.ac.uk'
     password: 'hidden'
     subscriptions: ['notice-board']
