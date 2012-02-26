@@ -46,6 +46,51 @@ class Server
         console.log labels
         Thread.find { 'labels': { $in: labels } }, (err, docs) ->
             console.log docs
+
+        # Message ID (Generate one if missing)
+        if message.header['message-id']?
+            msgId = message.header['message-id']['value']
+        else
+            d = new Date()
+            msgId = 'generated-id@example.com'
+
+        # Parent Message ID (could be undefined)
+        parentMsgId = message.header['in-reply-to']['value'] if message.header['in-reply-to']?
+        console.log msgId
+        console.log parentMsgId
+
+        if parentMsgId?
+            #
+            # Child message
+            # 1. Look for parentMessageId in Thread.messageIds
+            # 2. Insert messageId into Thread.messageIds
+            # 3. Append message to Thread.messages
+            # 4. save Thread
+            #
+            Thread.find { 'messageIds': parentMsgId }, (err, docs) ->
+                console.log "Unable to find Thread with containing #{parentMessageId}:#{err}" if err?
+                for doc in docs
+                    do (doc) ->
+                        doc.messageIds.push msgId
+                        doc.messages.push { subject: message.header.subject
+                                           ,sender:  message.header.from.value
+                                           ,body:    message.body }
+                        doc.save()
+        else
+            #
+            # Root message
+            # 1. Create new Thread with labels
+            # 2. Set messages and messageIds
+            # 3. save Thread
+            #
+            thread = new Thread
+                labels: labels
+                messages: [ { subject: message.header.subject
+                             ,sender:  message.header.from.value
+                             ,body:    message.body } ]
+                messageIds: [ msgId ]
+            thread.save()
+
 	    #Thread.where('labels').in(labels).run (err, docs) ->
         #    console.log docs
         #for listener in @listeners
