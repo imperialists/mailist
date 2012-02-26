@@ -6,4 +6,4 @@ Message = new mongoose.Schema(
   body: String
 )
 
-module.exports = mongoose.model 'Message', Message
+###module.exports = mongoose.model 'Message', Message###
