@@ -12,27 +12,10 @@ header
         h2 Tell your friends
         p.grey Tell your friends about The Board. See what they are interested in.
       .left
-        form.clearfix(action='#', method='post')
-          h1 Member Login
-          label.grey(for='log') Username:
-          input#log.field(type='text', name='log', value='', size='23')
-          label.grey(for='pwd') Password:
-          input#pwd.field(type='password', name='pwd', size='23')
-          label
-            input#rememberme(name='rememberme', type='checkbox', checked='checked', value='forever')
-            | Remember me
-          .clear
-          input.bt_login(type='submit', name='submit', value='Login')
-          a.lost-pwd(href='#') Lost your password?
+        !=partial('login')
+
       .left.right
-        form(action='#', method='post')
-          h1 Not a member yet? Sign Up!
-          label.grey(for='signup') Username:
-          input#signup.field(type='text', name='signup', value='', size='23')
-          label.grey(for='email') Email:
-          input#email.field(type='text', name='email', size='23')
-          label A password will be e-mailed to you.
-          input.bt_register(type='submit', name='submit', value='Register')
+        !=partial('register')
   .tab
     ul.login
       li.left  
