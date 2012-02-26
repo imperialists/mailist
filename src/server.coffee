@@ -80,8 +80,6 @@ class Server
                     # Create user if not existing
                     user = new User({ name: senderEmail, email: senderEmail, subscriptions: [] }) unless user?
                     user.subscriptions.push label for label in subscribeLabels
-                    console.log subscribeLabels
-                    console.log user.subscriptions
                     user.save()
 
         if unsubscribeLabels?
