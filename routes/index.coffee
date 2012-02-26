@@ -72,3 +72,8 @@ module.exports =
             message.save (err) ->
                 console.log "Error while saving message" if err?
                 res.json message unless err?
+
+                
+    logout: (req, res) ->
+        req.logout()
+        res.redirect '/'
