@@ -1,6 +1,7 @@
 connect = require 'connect'
 express = require 'express'
 jade = require 'jade'
+routes = require './routes'
 
 app = module.exports = express.createServer()
 
@@ -9,7 +10,7 @@ mongoose = require "mongoose"
 app.configure(() ->
     app.set 'view engine', 'jade'
     app.set 'views', "#{__dirname}/views"
-    
+
     app.use connect.bodyParser()
     app.use connect.static(__dirname + '/public')
     app.use express.cookieParser()
@@ -34,12 +35,10 @@ app.configure 'production', () ->
 
 # ROUTES
 
-app.get '/', (req, res) ->
-    res.render 'index',
-    	locals:
-    		title: 'Hello World!'
-    		
+app.get '/', routes.index
+app.get "/threads/:label", routes.getThreadsForLabel
+
 # SERVER
-    
+
 app.listen(3000)
-console.log "Express server listening on port #{app.address().port}"
+console.log "Express server listening on port %d in %s mode", app.address().port, app.settings.env
