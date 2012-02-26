@@ -5,7 +5,7 @@ User = new mongoose.Schema(
   email: String
   password: String
   subscriptions: [String]
-  pins: [mongoose.Schema.ObjectId]
+  pins: [{ type: mongoose.Schema.ObjectId, ref: 'Thread' }]
 )
 
 module.exports = mongoose.model 'User', User

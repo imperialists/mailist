@@ -3,12 +3,14 @@ Url        = require 'url'
 Log        = require 'log'
 Path       = require 'path'
 Connect    = require 'connect'
+UUID       = require 'node-uuid'
 
 utils      = require './lib/utils'
 
 mongoose   = require "mongoose"
-Message     = require '../models/Message'
+Message    = require '../models/Message'
 Thread     = require '../models/Thread'
+User       = require '../models/User'
 
 DEFAULT_ADAPTERS = [ 'smtp' ]
 
@@ -44,33 +46,36 @@ class Server
     # Returns nothing.
     receive: (message) ->
         labels = utils.extractUsernames utils.extractEmails(message.header.to.value.split ',')
-        console.log labels
         
-        message = new Message
-            subject: message.subject
-            sender: message.sender
-            body: message.body
+        msg =
+            subject: message.header.subject.value
+            sender: message.header.from.value
+            body: message.body[0].content
         
-        if id = message.header['in-reply-to']?
-            Thread.findOne { 'messages.id': id }, (err, thread) ->
-                thread.messages.push message
-                
-                User.find { pins: thread.id }, (err, users) ->
-                    @send(user, message) for user in users
+        if id = message.header['in-reply-to']?.value
+            Thread.findOne { 'messages.id': id }, (err, thread) =>
+                thread.messages.push msg
+                thread.save (err) =>
+                    @logger.error "Problem saving the thread: #{err}" if err?
+                    
+                    User.find { pins: thread.id }, (err, users) =>
+                        console.log "send to user #{user}"
+                        @send(user, message) for user in users
         else
-            thread = new Thread
-                labels: labels
-                messages: [ message ]
-            thread.save (err) ->
-                @logger.error "Cannot create new thread: #{err}" if err?
-        
-                User.find { 'subscriptions': { $in: labels } }, (err, users) ->
-                    @send(user, message) for user in users
+            thread = new Thread labels: labels
+            thread.messages.push msg
             
+            thread.save (err) =>
+                @logger.error "Cannot create new thread: #{err}" if err?
+                
+                User.find { 'subscriptions': { $in: labels } }, (err, users) =>
+                    console.log "send to user #{users}"
+                    @send(user, msg) for user in users
+            
+        console.log "sent"
         
-        
-        Thread.find { 'labels': { $in: labels } }, (err, docs) ->
-            console.log docs
+        #Thread.find { 'labels': { $in: labels } }, (err, docs) ->
+        #    console.log docs
 
 	    #Thread.where('labels').in(labels).run (err, docs) ->
         #    console.log docs

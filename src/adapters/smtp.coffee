@@ -4,6 +4,8 @@ Adapter  = require '../adapter'
 util     = require 'util'
 event    = require 'events'
 smtp     = require 'simplesmtp'
+mail     = require 'mailcomposer'
+email    = require 'emailjs'
 
 parser   = require '../parser'
 
@@ -11,7 +13,35 @@ class SMTP extends event.EventEmitter
     constructor: (@server) ->
         
     send: (user, message) ->
-        client = smtp.connect(25)
+        server = email.server.connect
+            host: 'smarthost.cc.ic.ac.uk'
+        server.send {
+            from: message.sender
+            to: user.email
+            subject: message.subject
+            text: message.body
+        }, (err, message) ->
+            @server.logger.error "Message send error #{err}" if err?
+
+        return
+        @client = smtp.connect 25, 'smarthost.cc.ic.ac.uk', name: 'maili.st'
+        @client.once 'idle', =>
+            console.log "#{message.sender} #{user.email}"
+            @client.useEnvelope
+                from: message.sender
+                to: [ user.email ]
+        @client.on 'rcptFailed', (addresses) =>
+            @server.logger.error "The #{addresses} were rejected"
+        @client.on 'message', =>
+            mail = new MailComposer
+                from: message.sender
+                to: user.email
+                body: message.body
+            mail.streamMessage
+            mail.pipe(@client)
+        @client.on 'ready', (success, response) =>
+            @server.logger.info "Message successfully sent #{response}"
+            
     
     receive: (message) ->
         @server.receive message

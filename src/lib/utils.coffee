@@ -6,9 +6,10 @@
 #         list of "Firstname, Lastname" <email@addre.ss>
 #
 exports.extractEmails = (users) -> users.map (user) ->
-    email = user.match /<([a-z0-9\._-]+@[a-z0-9\.-]+)>/i
-    email = user.match /([a-z0-9\._-]+@[a-z0-9\.-]+)/i unless email?
-	email?[1] ? ''
+    email = user.match /<([a-z0-9\._-]+@[a-z0-9\.-]+)>/
+    email = user.match /([a-z0-9\._-]+@[a-z0-9\.-]+)/ unless email?
+    if email? and email[1]? then email[1] else ''
+    #email?[1] ? ''
 
 
 # Extract lists of usernames from list of email addresses
