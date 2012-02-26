@@ -11,6 +11,7 @@ thread = new Thread
     labels: ['notice-board']
 
 thread.messages.push message
-thread.save()
+thread.save (err) ->
+	console.log err
 
 console.log 'Ihu'

@@ -4,6 +4,11 @@ Log        = require 'log'
 Path       = require 'path'
 Connect    = require 'connect'
 
+utils      = require './lib/utils'
+
+mongoose   = require "mongoose"
+Thread     = require '../models/Thread'
+
 DEFAULT_ADAPTERS = [ 'smtp' ]
 
 class Server
@@ -11,6 +16,7 @@ class Server
         @adapter = null
         @logger = new Log process.env.LOG_LEVEL or 'info'
         @loadAdapter adapterPath, adapter if adapter?
+        @db = mongoose.connect 'mongodb://localhost/mailist-dev'
 	
     # Load the adapter Maili.st is going to use.
     #
@@ -36,7 +42,12 @@ class Server
     #
     # Returns nothing.
     receive: (message) ->
-        console.log message
+        labels = utils.extractUsernames utils.extractEmails(message.header.to.value.split ',')
+        console.log labels
+        Thread.find { 'labels': { $in: labels } }, (err, docs) ->
+            console.log docs
+	    #Thread.where('labels').in(labels).run (err, docs) ->
+        #    console.log docs
         #for listener in @listeners
         #try
         #    results.push listener.call(message)
