@@ -12,6 +12,8 @@ Message    = require '../models/Message'
 Thread     = require '../models/Thread'
 User       = require '../models/User'
 
+conf       = require '../conf/development.json'
+
 DEFAULT_ADAPTERS = [ 'smtp' ]
 
 class Server
@@ -19,7 +21,7 @@ class Server
         @adapter = null
         @logger = new Log process.env.LOG_LEVEL or 'info'
         @loadAdapter adapterPath, adapter if adapter?
-        @db = mongoose.connect 'mongodb://localhost/mailist-dev'
+        @db = mongoose.connect conf.mongodb_uri
 	
     # Load the adapter Maili.st is going to use.
     #
@@ -45,7 +47,18 @@ class Server
     #
     # Returns nothing.
     receive: (message) ->
-        labels = utils.extractUsernames utils.extractEmails(message.header.to.value.split ',')
+        labelActions = utils.extractLabelActions utils.extractEmails(message.header.to.value.split ',')
+        labels = labelActions.map (la) -> la.label
+
+        # Look for subscribe request
+        subscribeLabels = la.label for la in labelActions when 'subscribe' in la.actions
+
+        # Look for unsubscribe request
+        unsubscribeLabels = la.label for la in labelActions when 'unsubscribe' in la.actions
+
+        # Inject a MessageID if does not exist. We need this to track Threads
+        #
+        message.header['message-id'] = { value: utils.generateMsgId message.header.from.value } unless message.header['message-id']?
         
         msg =
             id: message.header['message-id'].value

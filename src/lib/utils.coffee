@@ -6,16 +6,21 @@
 #         list of "Firstname, Lastname" <email@addre.ss>
 #
 exports.extractEmails = (users) -> users.map (user) ->
-    email = user.match /<([a-z0-9\._-]+@[a-z0-9\.-]+)>/
-    email = user.match /([a-z0-9\._-]+@[a-z0-9\.-]+)/ unless email?
+    email = user.match /<([a-z0-9+\._-]+@[a-z0-9\.-]*)>/
+    email = user.match /([a-z0-9+\._-]+@[a-z0-9\.-]*)/ unless email?
     if email? and email[1]? then email[1] else ''
     #email?[1] ? ''
 
 
-# Extract lists of usernames from list of email addresses
+# Extract label and actions from list of email addresses
 #
-exports.extractUsernames = (emails) -> emails.map (email) ->
-    email.replace /@[a-z0-9\.-]+$/i, ''
+exports.extractLabelActions = (emails) -> emails.map (email) ->
+    username = email.replace /@[a-z0-9\.-]+$/i, ''
+    actions = username.split '+'
+    {
+        label: actions[0]
+        actions: actions[1..actions.length]
+    }
 
 
 # Queue Id (16-char upper case random string) generator
