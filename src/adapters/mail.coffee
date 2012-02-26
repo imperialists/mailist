@@ -1,17 +1,33 @@
 Server   = require '../server'
 Adapter  = require '../adapter'
+
+event   = require 'events'
 smtp     = require 'simplesmtp'
 
-class Mail extends Adapter
+parser   = require '../xutils'
+
+class Mail extends event.EventEmitter
+    constructor: (@server) ->
+        
     send: (user, message) ->
-        # send
+        client = smtp.connect(25)
+    
+    receive: (message) ->
+        @server.receive message
     
     run: ->
+        self = @
+        options =
+            port: process.env.SMTP_PORT
+        
+        process.on "uncaughtException", (err) =>
+            @server.logger.error "#{err}"
+        
         @svr = smtp.createServer {
             name: 'maili.st'
-            SMTPBanner: 'maili.st SMTP server'
+            SMTPBanner: 'maili.st Server'
         }
-        @svr.listen conf.smtp_port, (err) ->
+        @svr.listen 25, (err) =>
             @server.logger.error "SMTP Server error: #{err}" if err?
 
         @svr.on 'startData', (envelope) =>
@@ -22,10 +38,11 @@ class Mail extends Adapter
             envelope.content += chunk
 
         @svr.on 'dataReady', (envelope, callback) =>
-            header, body = parser.parse_part envelope.content
+            { header, body } = parser.parse_part envelope.content
+            callback null, 'QUEUE-ID'
             @receive new Server.Message envelope.from, envelope.to, header, body
             
-        self.emit "connected"
+        #self.emit "connected"
         
         
 exports.use = (server) ->

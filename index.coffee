@@ -3,7 +3,7 @@
 #     Mailist = require 'mailist'
 #     list = Mailist.server 'mail'
 
-# Loads a Hubot robot
+# Loads a server
 exports.load = (adapterPath, adapterName) ->
   server = require './src/server'
   new server adapterPath, adapterName

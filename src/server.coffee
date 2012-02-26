@@ -4,7 +4,7 @@ Log        = require 'log'
 Path       = require 'path'
 Connect    = require 'connect'
 
-DEFAULT_ADAPTERS = [ 'smtp' ]
+DEFAULT_ADAPTERS = [ 'mail' ]
 
 class Server
     constructor: (adapterPath, adapter) ->
@@ -18,7 +18,7 @@ class Server
     # adapter - A String of the adapter name to use.
     #
     # Returns nothing.
-    @loadAdapter: ->
+    loadAdapter: (path, adapter) ->
         @logger.debug "Loading adapter #{adapter}"
         try
             path = if adapter in DEFAULT_ADAPTERS
@@ -37,7 +37,7 @@ class Server
     #
     # Returns nothing.
     receive: (message) ->
-        results = []
+        console.log message
         #for listener in @listeners
         #try
         #    results.push listener.call(message)
@@ -55,7 +55,9 @@ class Server
     #
     # Returns: Nothing.    
     run: ->
-        @adapter.run
+        @adapter.run()
         
 class Server.Message
-    constructor: (@user, @message) ->
+    constructor: (@from, @to, @header, @body) ->
+	
+module.exports = Server
