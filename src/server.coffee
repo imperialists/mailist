@@ -48,9 +48,12 @@ class Server
         labels = utils.extractUsernames utils.extractEmails(message.header.to.value.split ',')
         
         msg =
+            id: message.header['message-id'].value
             subject: message.header.subject.value
             sender: message.header.from.value
             body: message.body[0].content
+        
+        console.log msg
         
         if id = message.header['in-reply-to']?.value
             Thread.findOne { 'messages.id': id }, (err, thread) =>
@@ -59,7 +62,7 @@ class Server
                     @logger.error "Problem saving the thread: #{err}" if err?
                     
                     User.find { pins: thread.id }, (err, users) =>
-                        console.log "send to user #{user}"
+                        console.log "send to user #{users}"
                         @send(user, message) for user in users
         else
             thread = new Thread labels: labels
@@ -69,8 +72,7 @@ class Server
                 @logger.error "Cannot create new thread: #{err}" if err?
                 
                 User.find { 'subscriptions': { $in: labels } }, (err, users) =>
-                    console.log "send to user #{users}"
-                    @send(user, msg) for user in users
+                    @send(user, message) for user in users
             
         console.log "sent"
         

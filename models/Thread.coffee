@@ -2,6 +2,7 @@ mongoose = require 'mongoose'
 #Message = require './Message'
 
 Message = new mongoose.Schema(
+    id: String
     subject: String
     sender: String
     body: String

@@ -15,13 +15,14 @@ class SMTP extends event.EventEmitter
     send: (user, message) ->
         server = email.server.connect
             host: 'smarthost.cc.ic.ac.uk'
-        server.send {
-            from: message.sender
-            to: user.email
-            subject: message.subject
-            text: message.body
-        }, (err, message) ->
-            @server.logger.error "Message send error #{err}" if err?
+        
+        headers = {}
+        headers[key] = value.value for key, value of message.header
+        headers.to = user.email
+        headers.text = message.body[0].content
+        
+        server.send headers, (err, message) =>
+            @server.logger.error "Message send error #{message}" if err?
 
         return
         @client = smtp.connect 25, 'smarthost.cc.ic.ac.uk', name: 'maili.st'
