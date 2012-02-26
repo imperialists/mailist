@@ -4,7 +4,7 @@
 #
 # Launch a mailing list
 
-#Mailist    = require '..'
+Mailist    = require '..'
 Fs         = require 'fs'
 Path       = require 'path'
 HTTP       = require 'http'
