@@ -1,11 +1,35 @@
 mongoose = require 'mongoose'
+mongooseAuth = require 'mongoose-auth'
 
-User = new mongoose.Schema(
-  name: String
-  email: String
-  password: String
+UserSchema = new mongoose.Schema(
   subscriptions: [String]
   pins: [{ type: mongoose.Schema.ObjectId, ref: 'Thread' }]
 )
 
-module.exports = mongoose.model 'User', User
+UserSchema.plugin mongooseAuth,
+  everymodule:
+    everyauth:
+      User: ->
+        User
+
+  password:
+    loginWith: 'email'
+
+    extraParams:
+      name:
+        first: String
+        last: String
+      email: String
+
+    everyauth:
+      getLoginPath: "/login"
+      postLoginPath: "/login"
+      loginView: "login.jade"
+      getRegisterPath: "/register"
+      postRegisterPath: "/register"
+      registerView: "register.jade"
+      loginSuccessRedirect: "/"
+      registerSuccessRedirect: "/"
+
+User = mongoose.model 'User', UserSchema
+module.exports = User

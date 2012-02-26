@@ -42,3 +42,6 @@ module.exports =
     Thread.find { labels: { $in: [req.params.label] }}, (err, thread) ->
       res.json thread
 
+  logout: (req, res) ->
+    req.logout()
+    res.redirect '/'
