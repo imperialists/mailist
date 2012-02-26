@@ -5,7 +5,8 @@
 smtp     = require 'simplesmtp'
 mongoose = require 'mongoose'
 conf     = require '../conf/development.json'
-parser   = require './utils'
+parser   = require './parser'
+utils    = require './lib/utils.coffee'
 Message  = require '../models/Message'
 
 # ----- Init -----
@@ -54,5 +55,8 @@ svr.on 'dataReady', (envelope, callback) ->
         header: content.header
         body: content.body
     console.log message
+    console.log 'Label: ' +  (utils.extractUsernames utils.extractEmails message.to)
+    #console.log content
+    console.log envelope.content
     callback null, 'QUEUE-ID'
     console.log "Email received"
