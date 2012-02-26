@@ -246,7 +246,7 @@ header img {
 }
 
 #page {
-  width: 900px;
+  width: 940px;
   margin: 0 auto;
 }
 
@@ -267,20 +267,19 @@ header img {
 }
 
 #threads {
-  width: 580px;
+  width:720px;
   height: 100%;
   margin-right: 20px;
   float: left;
 }
 
 #groups {
-  width: 275px;
+  width:125px;
   height: 100%;
-  margin-top: 68px;
+  margin-top: 25px;
   padding-left: 25px;
   float: left;
   text-align: left;
-  background: url('../images/background-groups.png') no-repeat scroll 0 0;
 }
 
 #groups a.menu {
