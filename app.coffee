@@ -36,6 +36,7 @@ app.configure 'production', () ->
 # ROUTES
 
 app.get '/', routes.index
+app.get "/labels", routes.getLabels
 app.get "/threads/:label", routes.getThreadsForLabel
 
 # SERVER
