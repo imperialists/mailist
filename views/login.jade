@@ -1,13 +1,15 @@
-- if ('undefined' !== typeof errors && errors.length)
-  ul#errors
-    - each error in errors
-      li.error= error
-form(action='/login', method='POST')
+form.clearfix(action='/login', method='POST')
+  h1 Member Login
   #login
-    label(for=everyauth.password.loginFormFieldName) Email
-    input(type='text', name=everyauth.password.loginFormFieldName, value=email)
+    label.grey(for=everyauth.password.loginFormFieldName) Email
+    input#log.field(type='text', name=everyauth.password.loginFormFieldName, size='23')
   #password
-    label(for=everyauth.password.passwordFormFieldName) Password
-    input(type='password', name=everyauth.password.passwordFormFieldName)
+    label.grey(for=everyauth.password.passwordFormFieldName) Password
+    input#pwd.field(type='password', name=everyauth.password.passwordFormFieldName, size='23')
+  label
+    input#rememberme(name='rememberme', type='checkbox', checked='checked', value='forever')
+    | Remember me
+  .clear
   #submit
-    input(type='submit') Login
+    input.bt_login(type='submit', name='submit', value='Login')
+  a.lost-pwd(href='#') Lost your password?

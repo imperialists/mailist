@@ -1,23 +1,19 @@
-h2 Register
-- if ('undefined' !== typeof errors && errors.length)
-  ul#errors
-    - each error in errors
-      li.error= error
 form(action='/register', method='POST')
+  h1 Not a member yet? Sign Up!
   #login
-    label(for=everyauth.password.loginFormFieldName) Login
-    input(type='text', name=everyauth.password.loginFormFieldName, value=userParams[everyauth.password.loginFormFieldName])
+    label.grey(for=everyauth.password.loginFormFieldName) Login
+    input#signup.field(type='text', name=everyauth.password.loginFormFieldName, size='23')
   #email
-    label(for='email') Email
-    input(type='text', name='email')
+    label.grey(for='email') Email
+    input#email.field(type='text', name='email', size='23')
   #password
-    label(for=everyauth.password.passwordFormFieldName) Password
-    input(type='password', name=everyauth.password.passwordFormFieldName)
+    label.grey(for=everyauth.password.passwordFormFieldName) Password
+    input#pwd.field(type='password', name=everyauth.password.passwordFormFieldName, size='23')
   #first-name
-    label(for='name.first') First Name
-    input(type='text', name='name.first')
+    label.grey(for='name.first') First Name
+    input#signup.field(type='text', name='name.first')
   #last-name
-    label(for='name.last') Last Name
-    input(type='text', name='name.last')
+    label.grey(for='name.last') Last Name
+    input#signup.field(type='text', name='name.last')
   #submit
-    input(type='submit') Register
+    input.bt_register(type='submit', name='submit', value='Register')
