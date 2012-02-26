@@ -6,7 +6,7 @@ Message = new mongoose.Schema(
     subject: String
     sender: String
     body: String
-    sent: Date
+    sent: { type: Date, default: Date.now }
 )
 
 Message.path('subject').validate (val) ->

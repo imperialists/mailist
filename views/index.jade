@@ -1,2 +1,128 @@
-h1= title
-p Welcome to #{title}
+header
+  div
+    img(src='images/logo.png', alt='')
+#toppanel
+  #panel
+    .content.clearfix
+      .left(style='width: 220px;')
+        h1 Welcome to The Board
+        h2 Your life, More organised
+        p.grey
+          | You can put anything you want in this sliding panel: videos, audio, img, forms... The only limit is your imagination!
+        h2 Tell your friends
+        p.grey Tell your friends about The Board. See what they are interested in.
+      .left
+        form.clearfix(action='#', method='post')
+          h1 Member Login
+          label.grey(for='log') Username:
+          input#log.field(type='text', name='log', value='', size='23')
+          label.grey(for='pwd') Password:
+          input#pwd.field(type='password', name='pwd', size='23')
+          label
+            input#rememberme(name='rememberme', type='checkbox', checked='checked', value='forever')
+            | Remember me
+          .clear
+          input.bt_login(type='submit', name='submit', value='Login')
+          a.lost-pwd(href='#') Lost your password?
+      .left.right
+        form(action='#', method='post')
+          h1 Not a member yet? Sign Up!
+          label.grey(for='signup') Username:
+          input#signup.field(type='text', name='signup', value='', size='23')
+          label.grey(for='email') Email:
+          input#email.field(type='text', name='email', size='23')
+          label A password will be e-mailed to you.
+          input.bt_register(type='submit', name='submit', value='Register')
+  .tab
+    ul.login
+      li.left  
+      li Hello Guest!
+      li.sep |
+      li#toggle
+        a#open.open(href='#') Log In | Register
+        a#close.close(style='display: none;', href='#') Close Panel
+      li.right  
+div(role='main')
+  #page
+    #threads
+      #menu
+        a(href='#') home
+        a(href='#') browse
+        a(href='#') about
+        a(href='#') contacts
+      #t
+      #c
+      div(style='clear: both;')
+    #groups
+      h4 Active filters
+      ul.groups-menu-active-filters
+        li
+          a(href='#')
+            img(src='images/close.jpg', alt='Close', width='11')
+            | Programming
+        li
+          a(href='#')
+            img(src='images/close.jpg', alt='Close', width='11')
+            | Pinned Only
+        li
+          a(href='#')
+            img(src='images/close.jpg', alt='Close', width='11')
+            | Coffee and Jade haters
+      h4 Add filters
+      ul.groups-menu-filters
+        li
+          img(src='images/expanded.gif', alt='Collapse', width='11', style='vertical-align: baseline;')
+          | Newer than
+          ul
+            li
+              a(href='#')
+                input(type='checkbox', name='newer_than', value='last_week')
+                | Last week
+            li
+              a(href='#')
+                input(type='checkbox', name='newer_than', value='last_week')
+                | Last month
+            li
+              a(href='#')
+                input(type='checkbox', name='newer_than', value='last_week')
+                | Last year
+        li
+          img(src='images/collapsed.gif', alt='Expand', width='11', style='vertical-align: baseline;')
+          | Category
+    div(style='clear: both;')
+footer
+  #sitemap
+    ul.social
+      li
+        img(src='images/imperialogo.png', width='100%', style='margin-top: 2px;')
+      li.cat(style='padding-top: 15px; text-align: left;') The Board © 2012
+    ul.first
+      li.cat The Board
+      li
+        a(href='#', alt='Home', title='Home') Home
+      li
+        a(href='#', alt='Group', title='TurningArt Plans & Pricing') Browse
+      li
+        a(href='#', alt='About', title='About') About
+      li
+        a(href='#', alt='Contacts', title='Contacts') Contacts
+    ul.last
+      li.cat Authors
+      li
+        a(href='#', alt='Feryal M.P. Behbahani', title='Feryal M.P. Behbahani') Feryal M.P. Behbahani
+      li
+        a(href='#', alt='Rumyana Neykova', title='Rumyana Neykova') Rumyana Neykova
+      li
+        a(href='#', alt='Petr Hosek', title='Petr Hosek') Petr Hosek
+      li
+        a(href='#', alt='Nicholas Ng', title='Nicholas Ng') Nicholas Ng
+    ul.last(style='border: 0;')
+      li.cat  
+      li
+        a(href='#', alt='Florian Rathgeber', title='Florian Rathgeber') Florian Rathgeber
+      li
+        a(href='#', alt='Deyan Ulevinov', title='Deyan Ulevinov') Deyan Ulevinov
+      li
+        a(href='#', alt='Jonathon Marks', title='Jonathon Marks') Jonathon Marks
+      li
+        a(href='#', alt='Bartosz Wozniak', title='Bartosz Wozniak') Bartosz Wozniak

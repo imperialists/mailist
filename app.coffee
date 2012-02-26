@@ -36,8 +36,13 @@ app.configure 'production', () ->
 # ROUTES
 
 app.get '/', routes.index
-app.get "/labels", routes.getLabels
-app.get "/threads/:label", routes.getThreadsForLabel
+app.get '/pinned', routes.getPinnedThreads
+app.get '/pin/:thread', routes.getPinThread
+app.get '/labels', routes.getLabels
+app.get '/threads/:label', routes.getThreadsForLabel
+app.get '/subscribed', routes.getSubscribedLabels
+app.get '/subscribe/:label', routes.subscribeToLabel
+app.post '/message/new', routes.postNewMessage
 
 # SERVER
 

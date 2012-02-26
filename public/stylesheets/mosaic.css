@@ -1,0 +1,53 @@
+/*
+	Mosaic - Sliding Boxes and Captions jQuery Plugin
+	Version 1.0.1
+	www.buildinternet.com/project/mosaic
+	
+	By Sam Dunn / One Mighty Roar (www.onemightyroar.com)
+	Released under MIT License / GPL License
+*/
+#threads .clearfix{ display: block; height: 0; clear: both; visibility: hidden; }
+						
+#threads .details{ margin:15px 20px; }	
+#threads h4{ font: 16px 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0 0 10px 0; padding: 0; letter-spacing:0.15em; color:#fff; text-shadow:1px 1px 0 rgb(0,0,0); }
+#threads .bar p {  font: 12px 'Lucida Grande', Tahoma, Verdana, sans-serif; color:#aaa; text-shadow:1px 1px 0 rgb(0,0,0); margin: 0 0 15px 0; padding: 0; }
+#threads a{ text-decoration:none; }
+
+/*General Mosaic Styles*/
+#threads .mosaic-block {
+	float: left;
+	position: relative;
+	overflow: hidden;
+	width: 276px;
+	height: 200px;
+	margin: 5px;
+	background: #111 url('../images/progress.gif') no-repeat center center;
+	border: 1px solid #fff;
+	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+#threads .mosaic-backdrop {
+		display:none;
+		position:absolute;
+		top:0;
+		height:100%;
+		width:100%;
+		background:#111;
+	}
+	
+#threads .mosaic-overlay {
+		display:none;
+		z-index:5;
+		position:absolute;
+		width:100%;
+		height:100%;
+		background:#111;
+	}
+	
+		/*** Custom Animation Styles (You can remove/add any styles below) ***/
+#threads .bar .mosaic-overlay {
+			bottom:-153px;
+			/* height:100px; */
+			background:url(../images/bg-black.png);
+		}		
+/*** End Animation Styles ***/
