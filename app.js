@@ -1,2 +1,2 @@
-equire("coffee-script");
+require("coffee-script");
 require('./app.coffee');
